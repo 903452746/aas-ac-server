@@ -1,0 +1,10 @@
+ac-clients:
+  clients:
+    aasTest02:
+      whiteIp: 127.0.0.1,192.168.81.238
+      secret: "aasTest02"
+      name: "aas应用2"
+    aasTest03:
+      whiteIp: 192.168.81.238,127.0.0.1
+      secret: "aasTest03"
+      name: "aas应用3"

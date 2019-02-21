@@ -1,0 +1,66 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.15.RELEASE'
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            credentials {
+                username = "${NEXUS_USER}"
+                password = "${NEXUS_PASSWORD}"
+            }
+            url "http://oss.apexsoft.com.cn/repository/maven-public/"
+        }
+    }
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        credentials {
+            username = "${NEXUS_USER}"
+            password = "${NEXUS_PASSWORD}"
+        }
+        url "http://oss.apexsoft.com.cn/repository/maven-public/"
+    }
+}
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+ext {
+    aasVersion = "1.1.0-SNAPSHOT"
+    amsVersion = "1.0.1"
+}
+
+group 'com.apexsoft.aas'
+version '1.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+//version = version + '-' + new Date().format("yyyyMMdd")
+
+configurations {
+    providedRuntime
+    all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+}
+
+configurations.all {
+    //每隔24小时检查远程依赖是否存在更新
+    //resolutionStrategy.cacheChangingModulesFor 24, 'hours'
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+dependencies {
+    compile "com.apexsoft:aas-ac-common:1.0.0-SNAPSHOT"
+    compile "com.apexsoft:aas-spring-boot-starter:${aasVersion}"
+    //指定jna版本为4.5.1，避免Mac、Windows系统取不到内存、硬盘信息
+    compile('net.java.dev.jna:jna:4.5.1')
+    compile('net.java.dev.jna:jna-platform:4.5.1')
+    compile('mysql:mysql-connector-java:8.0.15')
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+
+}
+
+apply from: "package.gradle"

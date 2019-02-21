@@ -1,0 +1,46 @@
+application:
+  #应用名称，必须配置，集群中的应用名称必须一致
+  name: aas.ac
+server:
+  #服务端口
+  port: 8080
+spring:
+  thymeleaf:
+    cache: false
+  datasource:
+    aasDs:
+      name: main-mysql
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://192.168.3.28:3306/dd?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+      username: dongdong
+      password: dongdong
+      initialSize: 5
+      maxActive: 20
+      validationQuery: select 1
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxOpenPreparedStatements: 100
+      filters: stat,wall
+aas:
+  ac:
+    direct: false
+    kaptcha:
+      enable: true
+      expire: 30000
+  swagger: #swagger插件
+    enabled: true
+    showDemo: false
+  #认证模式配置 type可以simple和livebos
+  authentication:
+    enabled: true
+    type: livebos
+  livebos:
+    api-user: ws_user
+    api-pwd: '000000'
+    ams:
+      enabled: false
+    ws:
+      enabled: true
+      address: http://192.168.3.20:8090

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>系统选择</title>
+    <script type="text/javascript" src="/webjars/js/aes-1.0.5.js"/>
+    <script type="text/javascript" src="/webjars/jquery/dist/jquery.min.js"/>
+
+    <link href="/css/tyrz.css" type="text/css" rel="stylesheet"/>
+
+</head>
+
+<body class="login_bg">
+<div class="login_xt">
+    <div class="title fs24">请点击您要登录的系统</div>
+    <div class="dl_chose_box">
+        <ul class="clear">
+
+            <li th:each="client:${clientList}" th:onclick="|f('${client.domain}')|" th:text="${client.name}"></li>
+
+        </ul>
+    </div>
+</div>
+<script th:inline="javascript">
+    //<![CDATA[
+    $(function () {
+        var window_h = $(window).height();
+        $(".login_xt").css("margin-top", (window_h - $(".dl_chose_box").height() - 80) / 2);
+    })
+
+    function f(domain) {
+        location.href = domain;
+    }
+
+    //]]>
+</script>
+</body>
+</html>

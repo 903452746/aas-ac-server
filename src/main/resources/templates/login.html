@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>统一认证</title>
+<script type="text/javascript" th:src="@{/webjars/js/aes-1.0.5.js}"/>
+<script type="text/javascript" th:src="@{/webjars/jquery/dist/jquery.min.js}"/>
+<link th:href="@{/css/tyrz.css}" type="text/css" rel="stylesheet"/>
+
+</head>
+<body class="login_bg">
+<div class="login_box">
+    <div class="title fs32">
+        <strong>统一认证</strong>
+    </div>
+    <div class="login_box_dl">
+
+        <p><span>用户名</span><input id="user" type="text"/></p>
+
+        <p><span>密　码</span><input id="password" type="password"/><!--<a class="wjmm">忘记密码</a>--></p>
+
+        <p th:if="${kaptcha == true}"><span>验证码</span><input id="code" type="text" class="yzm"/><em><img alt="验证码" onclick="changeYzm(this)" th:src="@{/defaultKaptcha}"/></em></p>
+
+        <p style="text-align: center;color: red" th:text="${error == null ? '' : error}"></p>
+
+        <p class="tc"><a class="dl_btn" id="loginBtn">登　录</a></p>
+    </div>
+</div>
+<div style="display: none;">
+    <form th:action="@{/acAuth/html}" id="loginData" method="post">
+        <input type="text" name="clientId" th:value="${clientId}"/>
+        <input type="text" name="callback" th:value="${callback}"/>
+        <input type="text" name="signature"/>
+        <input type="text" name="ext" th:value="${ext}"/>
+        <input type="text" name="verifyCode"/>
+    </form>
+</div>
+<script th:inline="javascript">
+    //<![CDATA[
+    $(function () {
+        var window_h = $(window).height();
+        $(".login_box").css("margin-top", (window_h - 645) / 2);
+
+        $("#loginBtn").on("click", function () {
+            var code = $("#code").val();
+            if ([[${kaptcha}]] && (code == null || code == '')) {
+                alert("请输入验证码");
+                return false;
+            }
+
+            AES.setSecret([[${secret}]]);
+            var data = "user=" + $("#user").val() + "&password=" + $("#password").val();
+            var encode = AES.encryptBase64(data);
+            $("input[name=signature]").val(encode);
+            $("input[name=verifyCode]").val(code);
+            $("#loginData").submit();
+        })
+    });
+    function changeYzm(obj){
+        var root =/*[[@{/}]]*/;
+        $(obj).attr("src",root+'defaultKaptcha?d='+new Date()*1);
+    }
+    //]]>
+</script>
+</body>
+</html>

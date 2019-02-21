@@ -1,0 +1,38 @@
+task deleteTemp(type: Delete,dependsOn :bootRepackage) {
+    delete 'build/zipTemp'
+
+}
+task configCopy(type: Copy,dependsOn :deleteTemp) {
+    from('src/main/resources') {
+        include 'cert/**','**/*.yml'
+    }
+    into 'build/zipTemp/config'
+
+}
+task zipCopy(type: Copy) {
+    from('deploy') {
+        include '**'
+    }
+    from('.') {
+        include '*.db'
+        include 'db/**'
+    }
+    from('script') {
+        include '*'
+    }
+    from('build/libs') {
+        include '*.jar'
+        rename '(.*)',"${project.name}.jar"
+    }
+    into 'build/zipTemp'
+
+}
+task zipPackage(type: Zip,dependsOn :zipCopy) {
+    from 'build/zipTemp'
+    destinationDir file('build/libs')
+    baseName "${project.name}"
+    version "${version}"
+    extension 'zip'
+}
+
+zipCopy.dependsOn configCopy, bootRepackage

@@ -1,0 +1,20 @@
+ams:
+  authority: livebos-server
+  config:
+    enabled: true
+  ca:
+    certFile: classpath:cert/ca.pem
+  client:
+    certFile: classpath:cert/client.pem
+    keyFile: classpath:cert/client.pkcs8.pem
+  server:
+    autoStartup: true
+    certFile: classpath:cert/server.pem
+    keyFile: classpath:cert/server.pkcs8.pem
+  registry:
+    protocol: zk
+    #address: 192.168.80.185:2181
+    address: 192.168.230.128:32181
+    #address: 192.168.80.239:2181
+    #address: 192.168.0.87:2181,192.168.0.98:2181,192.168.0.99:2181
+
